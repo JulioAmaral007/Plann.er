@@ -82,6 +82,7 @@ export function DestinationAndDateStep({
 
             <DayPicker
               mode="range"
+              fromDate={new Date()}
               selected={eventStartAndEndDates}
               onSelect={setEventStartAndEndDates}
             />
