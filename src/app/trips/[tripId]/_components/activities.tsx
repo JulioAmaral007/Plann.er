@@ -5,7 +5,7 @@ import { useParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { api } from '../../../../lib/axios'
 
-interface Activity {
+type Activity = {
   date: string
   activities: {
     id: string

@@ -1,9 +1,11 @@
 'use client'
 
+import { Button } from '@/components/button'
 import { Plus } from 'lucide-react'
 import { useState } from 'react'
 import { Activities } from './_components/activities'
 import { CreateActivityModal } from './_components/create-activity-modal'
+import { ImportantLinksModal } from './_components/create-important-link'
 import { DestinationAndDateHeader } from './_components/destination-and-date-header'
 import { Guests } from './_components/guests'
 import { ImportantLinks } from './_components/important-links'
@@ -18,6 +20,17 @@ export default function TripDetailsPage() {
 
   function closeCreateActivityModal() {
     setIsCreateActivityModalOpen(false)
+  }
+
+  const [isImportantLinksModalOpen, setIsImportantLinksModalOpen] =
+    useState(false)
+
+  function openImportantLinksModal() {
+    setIsImportantLinksModalOpen(true)
+  }
+
+  function closeImportantLinksModal() {
+    setIsImportantLinksModalOpen(false)
   }
 
   return (
@@ -45,8 +58,17 @@ export default function TripDetailsPage() {
         </div>
 
         <div className="w-80 space-y-6">
-          <div className="hidden md:flex">
+          <div className="hidden md:flex md:flex-col md:gap-5">
             <ImportantLinks />
+
+            <Button
+              variant="secondary"
+              size="full"
+              onClick={openImportantLinksModal}
+            >
+              <Plus className="size-5" />
+              Cadastrar novo link
+            </Button>
           </div>
 
           <div className="h-px w-full bg-zinc-800" />
@@ -58,6 +80,12 @@ export default function TripDetailsPage() {
       {isCreateActivityModalOpen && (
         <CreateActivityModal
           closeCreateActivityModal={closeCreateActivityModal}
+        />
+      )}
+
+      {isImportantLinksModalOpen && (
+        <ImportantLinksModal
+          closeImportantLinksModal={closeImportantLinksModal}
         />
       )}
     </div>

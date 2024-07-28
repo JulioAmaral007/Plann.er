@@ -1,29 +1,29 @@
-import { Calendar, Tag, X } from 'lucide-react'
+import { api } from '@/lib/axios'
+import { Link2, Tag, X } from 'lucide-react'
 import { useParams } from 'next/navigation'
 import { FormEvent } from 'react'
 import { Button } from '../../../../components/button'
-import { api } from '../../../../lib/axios'
 
-interface CreateActivityModalProps {
-  closeCreateActivityModal: () => void
+interface ImportantLinksModalProps {
+  closeImportantLinksModal: () => void
 }
 
-export function CreateActivityModal({
-  closeCreateActivityModal,
-}: CreateActivityModalProps) {
+export function ImportantLinksModal({
+  closeImportantLinksModal,
+}: ImportantLinksModalProps) {
   const { tripId } = useParams()
 
-  async function createActivity(event: FormEvent<HTMLFormElement>) {
+  async function createLink(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
 
     const data = new FormData(event.currentTarget)
 
     const title = data.get('title')?.toString()
-    const occurs_at = data.get('occurs_at')?.toString()
+    const url = data.get('url')?.toString()
 
-    await api.post(`/trips/${tripId}/activities`, {
+    await api.post(`/trips/${tripId}/links`, {
       title,
-      occurs_at,
+      url,
     })
 
     window.document.location.reload()
@@ -34,42 +34,42 @@ export function CreateActivityModal({
       <div className="w-[320px] space-y-5 rounded-xl bg-zinc-900 px-6 py-5 shadow-shape md:w-[640px]">
         <div className="space-y-2">
           <div className="flex items-center justify-between">
-            <h2 className="font-lg font-semibold">Cadastrar atividade</h2>
+            <h2 className="font-lg font-semibold">Cadastrar link</h2>
             <button>
               <X
                 className="size-5 text-zinc-400"
-                onClick={closeCreateActivityModal}
+                onClick={closeImportantLinksModal}
               />
             </button>
           </div>
 
           <p className="text-sm text-zinc-400">
-            Todos convidados podem visualizar as atividades.
+            Todos convidados podem visualizar os links importantes.
           </p>
         </div>
 
-        <form onSubmit={createActivity} className="space-y-3">
+        <form onSubmit={createLink} className="space-y-3">
           <div className="flex h-14 items-center gap-2 rounded-lg border border-zinc-800 bg-zinc-950 px-4">
             <Tag className="size-5 text-zinc-400" />
             <input
               name="title"
-              placeholder="Qual a atividade?"
+              type="text"
+              placeholder="Título do link"
               className="flex-1 bg-transparent placeholder-zinc-400 outline-none md:text-lg"
             />
           </div>
 
           <div className="flex h-14 flex-1 items-center gap-2 rounded-lg border border-zinc-800 bg-zinc-950 px-4">
-            <Calendar className="size-5 text-zinc-400" />
+            <Link2 className="size-5 text-zinc-400" />
             <input
-              type="datetime-local"
-              min={new Date().toISOString().slice(0, 16)}
-              name="occurs_at"
-              placeholder="Data e horário da atividade"
+              name="url"
+              type="url"
+              placeholder="URL"
               className="flex-1 bg-transparent placeholder-zinc-400 outline-none md:text-lg"
             />
           </div>
 
-          <Button size="full">Salvar atividade</Button>
+          <Button size="full">Salvar link</Button>
         </form>
       </div>
     </div>

@@ -1,49 +1,55 @@
-import { Link2, Plus } from 'lucide-react'
-import { Button } from '../../../../components/button'
+import { api } from '@/lib/axios'
+import { Link2 } from 'lucide-react'
+import { useParams } from 'next/navigation'
+import { useEffect, useState } from 'react'
+
+type Link = {
+  id: string
+  title: string
+  url: string
+}
 
 export function ImportantLinks() {
+  const { tripId } = useParams()
+  const [links, setLinks] = useState<Link[]>([])
+
+  useEffect(() => {
+    api
+      .get(`trips/${tripId}/links`)
+      .then((response) => setLinks(response.data.links))
+  }, [tripId])
+
   return (
     <div className="space-y-6">
       <h2 className="text-xl font-semibold">Links importantes</h2>
+      {links.length > 0 ? (
+        links.map((link) => (
+          <div
+            key={link.id}
+            className="flex items-center justify-between gap-4"
+          >
+            <div className="space-y-1.5">
+              <span className="block font-medium text-zinc-100">
+                {link.title}
+              </span>
+              <a
+                href={`${link.url}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block truncate text-xs text-zinc-400 hover:text-zinc-200"
+              >
+                {link.url}
+              </a>
+            </div>
 
-      <div className="space-y-5">
-        <div className="flex items-center justify-between gap-4">
-          <div className="space-y-1.5">
-            <span className="block font-medium text-zinc-100">
-              Reserva do AirBnB
-            </span>
-            <a
-              href="#"
-              className="block truncate text-xs text-zinc-400 hover:text-zinc-200"
-            >
-              https://www.airbnb.com.br/rooms/10470001139028321098312093821903812038910
-            </a>
+            <Link2 className="size-5 shrink-0 text-zinc-400" />
           </div>
-
-          <Link2 className="size-5 shrink-0 text-zinc-400" />
-        </div>
-
-        <div className="flex items-center justify-between gap-4">
-          <div className="space-y-1.5">
-            <span className="block font-medium text-zinc-100">
-              Reserva do AirBnB
-            </span>
-            <a
-              href="#"
-              className="block truncate text-xs text-zinc-400 hover:text-zinc-200"
-            >
-              https://www.airbnb.com.br/rooms/10470001139028321098312093821903812038910
-            </a>
-          </div>
-
-          <Link2 className="size-5 shrink-0 text-zinc-400" />
-        </div>
-      </div>
-
-      <Button variant="secondary" size="full">
-        <Plus className="size-5" />
-        Cadastrar novo link
-      </Button>
+        ))
+      ) : (
+        <p className="text-sm text-zinc-500">
+          Nenhuma atividade cadastrada nessa data.
+        </p>
+      )}
     </div>
   )
 }
